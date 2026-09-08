@@ -1,31 +1,197 @@
-\documentclass{article}
-\usepackage{amsmath, amssymb}   % math
-\usepackage{listings}            % R code
-\usepackage{xcolor}              % syntax highlighting
+% ============================================================
+%  PROBLEMAS DE PROBABILIDAD — UNIDAD 1
+%  Un archivo por unidad; agregar bloques \dayheader según avanza el curso.
+%  Compilar con pdflatex (funciona en Overleaf sin configuración extra).
+% ============================================================
 
-\lstset{
+\documentclass[12pt, a4paper]{article}
+
+% ---- codificación e idioma ---------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+
+% ---- matemática --------------------------------------------
+\usepackage{amsmath, amssymb, amsthm}
+
+% ---- código R ----------------------------------------------
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0.2,0.5,0.2}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codeblue}{rgb}{0.1,0.1,0.8}
+\definecolor{backcolor}{rgb}{0.97,0.97,0.97}
+
+\lstdefinestyle{Rstyle}{
   language=R,
+  backgroundcolor=\color{backcolor},
   basicstyle=\ttfamily\small,
-  keywordstyle=\color{blue},
-  commentstyle=\color{gray},
+  keywordstyle=\color{codeblue}\bfseries,
+  commentstyle=\color{codegreen}\itshape,
+  stringstyle=\color{orange},
+  numberstyle=\tiny\color{codegray},
+  numbers=left,
+  stepnumber=1,
   frame=single,
-  breaklines=true
+  rulecolor=\color{codegray},
+  breaklines=true,
+  showstringspaces=false,
+  tabsize=2,
+  captionpos=b
+}
+\lstset{style=Rstyle}
+
+% ---- diseño de página --------------------------------------
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{hyperref}
+
+% ---- encabezado y pie de página ----------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\textbf{Probabilidad} — Unidad 1: \nombreunidad}
+\rhead{\today}
+\cfoot{Página \thepage\ de \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ---- contador de problemas ---------------------------------
+%  Se reinicia con cada \dayheader.
+\newcounter{problema}
+\renewcommand{\theproblema}{\arabic{diaactual}.\arabic{problema}}
+
+\newcounter{diaactual}   % guarda el número del día actual
+
+\newcommand{\problema}[1][]{%        \problema  o  \problema[título]
+  \refstepcounter{problema}%
+  \medskip
+  \noindent\textbf{Problema~\theproblema%
+    \ifx&#1&\else~—~#1\fi}%
+  \par\smallskip
 }
 
-\title{Probability Problems}
-\author{}
-\date{\today}
+% ---- comando \dayheader ------------------------------------
+%  Uso:  \dayheader{1}{Subtítulo descriptivo}
+%  (Se llama dayheader en lugar de \day para no colisionar
+%   con el comando interno de LaTeX \day.)
+\newcommand{\dayheader}[2]{%
+  \setcounter{diaactual}{#1}%
+  \setcounter{problema}{0}%
+  \section*{Clase #1 \normalfont\small— #2}%
+  \addcontentsline{toc}{section}{Clase #1: #2}%
+}
 
+% ---- nombre de la unidad (editar aquí) ---------------------
+\newcommand{\nombreunidad}{Espacios Muestrales y Eventos}
+
+% ============================================================
 \begin{document}
-\maketitle
+% ============================================================
 
-\section*{Problem 1}
-Let $X \sim \text{Binomial}(n, p)$. Show that...
+\begin{center}
+  {\LARGE \textbf{Unidad 1: \nombreunidad}} \\[0.4em]
+  {\large Probabilidad — Guía de Problemas} \\[0.2em]
+  {\small Última actualización: \today}
+\end{center}
 
+\tableofcontents
+\bigskip\hrule\bigskip
+
+% ============================================================
+\dayheader{1}{Introducción a los espacios muestrales}
+% ============================================================
+
+\problema
+Se lanza un dado equilibrado de seis caras.
+\begin{enumerate}[label=(\alph*)]
+  \item Escriba el espacio muestral $\Omega$.
+  \item Sea $A$ el evento ``el resultado es par''. Liste los elementos de $A$.
+  \item Calcule $P(A)$.
+\end{enumerate}
+
+\problema[Regla del complemento]
+Sea $B$ el evento ``el resultado es mayor que 4''.
+\begin{enumerate}[label=(\alph*)]
+  \item Calcule $P(B)$ y $P(B^c)$.
+  \item Verifique que $P(B) + P(B^c) = 1$.
+\end{enumerate}
+
+\problema[Simulación en R]
+El siguiente código simula 10\,000 lanzamientos de un dado equilibrado
+y estima $P(A)$ del Problema~1.1.
 \begin{lstlisting}
-# R code example
-x <- rbinom(1000, size = 10, prob = 0.3)
-hist(x)
+set.seed(42)
+lanzamientos <- sample(1:6, size = 10000, replace = TRUE)
+
+# Estimar P(par)
+mean(lanzamientos %% 2 == 0)
 \end{lstlisting}
+Ejecute el código, compare con el valor teórico y explique cualquier discrepancia.
+
+% ============================================================
+\dayheader{2}{Operaciones entre eventos}
+% ============================================================
+
+\problema
+Sea $\Omega = \{1,2,3,4,5,6\}$, $A = \{2,4,6\}$, $B = \{4,5,6\}$.
+Calcule:
+\begin{enumerate}[label=(\alph*)]
+  \item $A \cup B$
+  \item $A \cap B$
+  \item $A \setminus B$
+  \item $A^c \cap B$
+\end{enumerate}
+
+\problema
+Con los mismos eventos, verifique la fórmula de inclusión-exclusión:
+\[
+  P(A \cup B) = P(A) + P(B) - P(A \cap B).
+\]
+
+\problema[Leyes de De Morgan]
+Demuestre o ilustre con un ejemplo que
+\[
+  (A \cup B)^c = A^c \cap B^c.
+\]
+
+% ============================================================
+\dayheader{3}{Probabilidad condicional}
+% ============================================================
+
+\problema
+Se extrae una carta al azar de un mazo estándar de 52 cartas.
+Sea $A = \{\text{la carta es corazón}\}$ y $B = \{\text{la carta es figura}\}$.
+\begin{enumerate}[label=(\alph*)]
+  \item Calcule $P(A \mid B)$.
+  \item ¿Son $A$ y $B$ independientes? Justifique.
+\end{enumerate}
+
+\problema[Simulación en R]
+Estime $P(A \mid B)$ por simulación y compare con el resultado anterior.
+\begin{lstlisting}
+set.seed(7)
+palos   <- rep(c("corazon","diamante","trebol","pica"), each = 13)
+valores <- rep(c(2:10, "J", "Q", "K", "A"), times = 4)
+mazo    <- data.frame(palo = palos, valor = valores)
+
+n       <- 100000
+extracc <- mazo[sample(nrow(mazo), n, replace = TRUE), ]
+
+figuras  <- extracc$valor %in% c("J", "Q", "K")
+corazon  <- extracc$palo == "corazon"
+
+# Estimar P(corazon | figura)
+mean(corazon[figuras])
+\end{lstlisting}
+
+% ============================================================
+%  Agregar más bloques \dayheader{4}{...} a medida que avanza la unidad.
+% ============================================================
 
 \end{document}
