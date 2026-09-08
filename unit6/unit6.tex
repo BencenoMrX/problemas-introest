@@ -1,4 +1,152 @@
-\documentclass{article}
+% ============================================================
+%  PROBLEMAS DE PROBABILIDAD — UNIDAD 2
+%  Un archivo por unidad; agregar bloques \dayheader según avanza el curso.
+%  Compilar con pdflatex (funciona en Overleaf sin configuración extra).
+% ============================================================
+
+\documentclass[12pt, a4paper]{article}
+
+% ---- codificación e idioma ---------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+
+% ---- matemática --------------------------------------------
+\usepackage{amsmath, amssymb, amsthm}
+
+% ---- código R ----------------------------------------------
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0.2,0.5,0.2}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codeblue}{rgb}{0.1,0.1,0.8}
+\definecolor{backcolor}{rgb}{0.97,0.97,0.97}
+
+\lstdefinestyle{Rstyle}{
+  language=R,
+  backgroundcolor=\color{backcolor},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{codeblue}\bfseries,
+  commentstyle=\color{codegreen}\itshape,
+  stringstyle=\color{orange},
+  numberstyle=\tiny\color{codegray},
+  numbers=left,
+  stepnumber=1,
+  frame=single,
+  rulecolor=\color{codegray},
+  breaklines=true,
+  showstringspaces=false,
+  tabsize=2,
+  captionpos=b
+}
+\lstset{style=Rstyle}
+
+% ---- diseño de página --------------------------------------
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{hyperref}
+
+
+% ---- contador de problemas ---------------------------------
+\newcounter{problema}
+\renewcommand{\theproblema}{\arabic{diaactual}.\arabic{problema}}
+
+\newcounter{diaactual}
+
+\newcommand{\problema}[1][]{%
+  \refstepcounter{problema}%
+  \medskip
+  \noindent\textbf{Problema~\theproblema%
+    \ifx&#1&\else~—~#1\fi}%
+  \par\smallskip
+}
+
+% ---- comando \dayheader ------------------------------------
+\newcommand{\dayheader}[2]{%
+  \setcounter{diaactual}{#1}%
+  \setcounter{problema}{0}%
+  \section*{Clase #1 \normalfont\small— #2}%
+  \addcontentsline{toc}{section}{Clase #1: #2}%
+}
+
+% ---- nombre de la unidad (editar aquí) ---------------------
+\newcommand{\nombreunidad}{Esperanza y Varianza}
+
+% ============================================================
 \begin{document}
-% Próximamente
+% ============================================================
+
+\textbf{8/9/26 - esperanza y varianza de variables aleatorias discretas}
+
+\textbf{Problema 1}
+
+En los videojuegos de Pokémon de primera generación, el  \textit{Ataque Furia}
+golpea aleatoriamente al rival entre 2 y 5 veces, con las siguientes probabilidades:
+
+\[
+  P(G = 2) = P(G = 3) = \frac{3}{8}, \qquad P(G = 4) = P(G = 5) = \frac{1}{8}.
+\]
+
+Sea $G$ la variable aleatoria que cuenta el número de golpes del ataque.
+
+\begin{enumerate}[label=\alph*)]
+  \item Calcular $E(G)$ y $\mathrm{Var}(G)$.
+  \item Cada golpe hace 15 puntos de daño con probabilidad $0{,}85$
+        (y 0 puntos si no). Suponiendo $G = 5$, calcular el daño promedio
+        esperado.
+\end{enumerate}
+
+\vspace{1 cm}
+
+\textbf{Problema 2}
+
+El número de pacientes que ingresa a una guardia de un centro de salud en una hora,
+$X$, sigue una distribución de Poisson de parámetro $\lambda = 4$, es decir:
+\[
+  P(X = k) = \frac{e^{-4}\,4^k}{k!}, \quad k = 0, 1, 2, \ldots
+\]
+
+\begin{enumerate}[label=\alph*)]
+  \item Calcular $P(X=0)$, $P(X=3)$ y $P(X \geq 2)$.
+  \item ¿Cuál es el número esperado de pacientes por hora?
+  \item Se dice que la guardia está \emph{saturada} si $X \geq 6$.
+        Calcular la probabilidad de que la guardia esté saturada
+        más de 5 horas en un día de 24 horas.
+  \item Cada paciente paga \$3\,000 de coseguro. Si la guardia está saturada,
+        los pacientes que llegan deciden irse para su casa y no pagan.
+        ¿Cuál es el ingreso promedio esperado por hora?
+\end{enumerate}
+
+\vspace{1 cm}
+
+\textbf{Problema 3}
+
+Consideremos la variable aleatoria $X$ con la siguiente distribución de probabilidad:
+
+\[
+  \begin{array}{c|ccccc}
+    x      & 0            & 1            & 2            & 3            & 4 \\
+    \hline
+    P(X=x) & \tfrac{1}{10} & \tfrac{2}{10} & \tfrac{3}{10} & \tfrac{3}{10} & \tfrac{1}{10}
+  \end{array}
+\]
+
+\begin{enumerate}[label=\alph*)]
+  \item Calcular $E(X)$ y $\mathrm{Var}(X)$.
+  \item Sea $Y = 2X - 3$. Calcular $E(Y)$ y $\mathrm{Var}(Y)$
+        usando las propiedades de esperanza y varianza.
+  \item Sea $Z = (X-2)^2$. Calcular $E(Z)$.
+\end{enumerate}
+
+% ============================================================
+%  Agregar más bloques \dayheader{2}{...} a medida que avanza la unidad.
+% ============================================================
+
 \end{document}
