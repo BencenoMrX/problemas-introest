@@ -16,12 +16,12 @@ jobs:
         with:
           root_file: |
             unit1/unit1.tex
-            unit2/unit2.tex
-            unit3/unit3.tex
-            unit4/unit4.tex
-            unit5/unit5.tex
-            unit6/unit6.tex
-            unit7/unit7.tex
+            #unit2/unit2.tex
+            #unit3/unit3.tex
+            #unit4/unit4.tex
+            #unit5/unit5.tex
+            #unit6/unit6.tex
+            #unit7/unit7.tex
           work_in_root_file_dir: true
 
       - name: Confirmar PDFs en el repositorio
