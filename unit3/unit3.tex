@@ -1,5 +1,5 @@
 % ============================================================
-%  PROBLEMAS DE PROBABILIDAD — UNIDAD 1
+%  PROBLEMAS DE PROBABILIDAD — UNIDAD 2
 %  Un archivo por unidad; agregar bloques \dayheader según avanza el curso.
 %  Compilar con pdflatex (funciona en Overleaf sin configuración extra).
 % ============================================================
@@ -53,22 +53,14 @@
 \usepackage{lastpage}
 \usepackage{hyperref}
 
-% ---- encabezado y pie de página ----------------------------
-\pagestyle{fancy}
-\fancyhf{}
-\lhead{\textbf{Probabilidad} — Unidad 1: \nombreunidad}
-\rhead{\today}
-\cfoot{Página \thepage\ de \pageref{LastPage}}
-\renewcommand{\headrulewidth}{0.4pt}
 
 % ---- contador de problemas ---------------------------------
-%  Se reinicia con cada \dayheader.
 \newcounter{problema}
 \renewcommand{\theproblema}{\arabic{diaactual}.\arabic{problema}}
 
-\newcounter{diaactual}   % guarda el número del día actual
+\newcounter{diaactual}
 
-\newcommand{\problema}[1][]{%        \problema  o  \problema[título]
+\newcommand{\problema}[1][]{%
   \refstepcounter{problema}%
   \medskip
   \noindent\textbf{Problema~\theproblema%
@@ -77,9 +69,6 @@
 }
 
 % ---- comando \dayheader ------------------------------------
-%  Uso:  \dayheader{1}{Subtítulo descriptivo}
-%  (Se llama dayheader en lugar de \day para no colisionar
-%   con el comando interno de LaTeX \day.)
 \newcommand{\dayheader}[2]{%
   \setcounter{diaactual}{#1}%
   \setcounter{problema}{0}%
@@ -88,110 +77,76 @@
 }
 
 % ---- nombre de la unidad (editar aquí) ---------------------
-\newcommand{\nombreunidad}{Espacios Muestrales y Eventos}
+\newcommand{\nombreunidad}{Esperanza y Varianza}
 
 % ============================================================
 \begin{document}
 % ============================================================
 
-\begin{center}
-  {\LARGE \textbf{Unidad 1: \nombreunidad}} \\[0.4em]
-  {\large Probabilidad — Guía de Problemas} \\[0.2em]
-  {\small Última actualización: \today}
-\end{center}
+\textbf{8/9/26 - esperanza y varianza de variables aleatorias discretas}
 
-\tableofcontents
-\bigskip\hrule\bigskip
+\textbf{Problema 1}
 
-% ============================================================
-\dayheader{1}{Introducción a los espacios muestrales}
-% ============================================================
+En los videojuegos de Pokémon de primera generación, el  \textit{Ataque Furia}
+golpea aleatoriamente al rival entre 2 y 5 veces, con las siguientes probabilidades:
 
-\problema
-Se lanza un dado equilibrado de seis caras.
-\begin{enumerate}[label=(\alph*)]
-  \item Escriba el espacio muestral $\Omega$.
-  \item Sea $A$ el evento ``el resultado es par''. Liste los elementos de $A$.
-  \item Calcule $P(A)$.
-\end{enumerate}
-
-\problema[Regla del complemento]
-Sea $B$ el evento ``el resultado es mayor que 4''.
-\begin{enumerate}[label=(\alph*)]
-  \item Calcule $P(B)$ y $P(B^c)$.
-  \item Verifique que $P(B) + P(B^c) = 1$.
-\end{enumerate}
-
-\problema[Simulación en R]
-El siguiente código simula 10\,000 lanzamientos de un dado equilibrado
-y estima $P(A)$ del Problema~1.1.
-\begin{lstlisting}
-set.seed(42)
-lanzamientos <- sample(1:6, size = 10000, replace = TRUE)
-
-# Estimar P(par)
-mean(lanzamientos %% 2 == 0)
-\end{lstlisting}
-Ejecute el código, compare con el valor teórico y explique cualquier discrepancia.
-
-% ============================================================
-\dayheader{2}{Operaciones entre eventos}
-% ============================================================
-
-\problema
-Sea $\Omega = \{1,2,3,4,5,6\}$, $A = \{2,4,6\}$, $B = \{4,5,6\}$.
-Calcule:
-\begin{enumerate}[label=(\alph*)]
-  \item $A \cup B$
-  \item $A \cap B$
-  \item $A \setminus B$
-  \item $A^c \cap B$
-\end{enumerate}
-
-\problema
-Con los mismos eventos, verifique la fórmula de inclusión-exclusión:
 \[
-  P(A \cup B) = P(A) + P(B) - P(A \cap B).
+  P(G = 2) = P(G = 3) = \frac{3}{8}, \qquad P(G = 4) = P(G = 5) = \frac{1}{8}.
 \]
 
-\problema[Leyes de De Morgan]
-Demuestre o ilustre con un ejemplo que
-\[
-  (A \cup B)^c = A^c \cap B^c.
-\]
+Sea $G$ la variable aleatoria que cuenta el número de golpes del ataque.
 
-% ============================================================
-\dayheader{3}{Probabilidad condicional}
-% ============================================================
-
-\problema
-Se extrae una carta al azar de un mazo estándar de 52 cartas.
-Sea $A = \{\text{la carta es corazón}\}$ y $B = \{\text{la carta es figura}\}$.
-\begin{enumerate}[label=(\alph*)]
-  \item Calcule $P(A \mid B)$.
-  \item ¿Son $A$ y $B$ independientes? Justifique.
+\begin{enumerate}[label=\alph*)]
+  \item Calcular $E(G)$ y $\mathrm{Var}(G)$.
+  \item Cada golpe hace 15 puntos de daño con probabilidad $0{,}85$
+        (y 0 puntos si no). Suponiendo $G = 5$, calcular el daño promedio
+        esperado.
 \end{enumerate}
 
-\problema[Simulación en R]
-Estime $P(A \mid B)$ por simulación y compare con el resultado anterior.
-\begin{lstlisting}
-set.seed(7)
-palos   <- rep(c("corazon","diamante","trebol","pica"), each = 13)
-valores <- rep(c(2:10, "J", "Q", "K", "A"), times = 4)
-mazo    <- data.frame(palo = palos, valor = valores)
+\vspace{1 cm}
 
-n       <- 100000
-extracc <- mazo[sample(nrow(mazo), n, replace = TRUE), ]
+\textbf{Problema 2}
 
-figuras  <- extracc$valor %in% c("J", "Q", "K")
-corazon  <- extracc$palo == "corazon"
+El número de pacientes que ingresa a una guardia de un centro de salud en una hora,
+$X$, sigue una distribución de Poisson de parámetro $\lambda = 4$, es decir:
+\[
+  P(X = k) = \frac{e^{-4}\,4^k}{k!}, \quad k = 0, 1, 2, \ldots
+\]
 
-# Estimar P(corazon | figura)
-mean(corazon[figuras])
-\end{lstlisting}
+\begin{enumerate}[label=\alph*)]
+  \item Calcular $P(X=0)$, $P(X=3)$ y $P(X \geq 2)$.
+  \item ¿Cuál es el número esperado de pacientes por hora?
+  \item Se dice que la guardia está \emph{saturada} si $X \geq 6$.
+        Calcular la probabilidad de que la guardia esté saturada
+        más de 5 horas en un día de 24 horas.
+  \item Cada paciente paga \$3\,000 de coseguro. Si la guardia está saturada,
+        los pacientes que llegan deciden irse para su casa y no pagan.
+        ¿Cuál es el ingreso promedio esperado por hora?
+\end{enumerate}
+
+\vspace{1 cm}
+
+\textbf{Problema 3}
+
+Consideremos la variable aleatoria $X$ con la siguiente distribución de probabilidad:
+
+\[
+  \begin{array}{c|ccccc}
+    x      & 0            & 1            & 2            & 3            & 4 \\
+    \hline
+    P(X=x) & \tfrac{1}{10} & \tfrac{2}{10} & \tfrac{3}{10} & \tfrac{3}{10} & \tfrac{1}{10}
+  \end{array}
+\]
+
+\begin{enumerate}[label=\alph*)]
+  \item Calcular $E(X)$ y $\mathrm{Var}(X)$.
+  \item Sea $Y = 2X - 3$. Calcular $E(Y)$ y $\mathrm{Var}(Y)$
+        usando las propiedades de esperanza y varianza.
+  \item Sea $Z = (X-2)^2$. Calcular $E(Z)$.
+\end{enumerate}
 
 % ============================================================
-%  Agregar más bloques \dayheader{4}{...} a medida que avanza la unidad.
+%  Agregar más bloques \dayheader{2}{...} a medida que avanza la unidad.
 % ============================================================
 
 \end{document}
