@@ -1,0 +1,31 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb}   % math
+\usepackage{listings}            % R code
+\usepackage{xcolor}              % syntax highlighting
+
+\lstset{
+  language=R,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray},
+  frame=single,
+  breaklines=true
+}
+
+\title{Probability Problems}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Problem 1}
+Let $X \sim \text{Binomial}(n, p)$. Show that...
+
+\begin{lstlisting}
+# R code example
+x <- rbinom(1000, size = 10, prob = 0.3)
+hist(x)
+\end{lstlisting}
+
+\end{document}

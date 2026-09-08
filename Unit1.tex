@@ -1,0 +1,193 @@
+% ============================================================
+%  PROBABILITY PROBLEMS — UNIT 1
+%  One file per unit; add \day sections as the course advances.
+%  Compile with pdflatex (works on Overleaf out of the box).
+% ============================================================
+
+\documentclass[12pt, a4paper]{article}
+
+% ---- encoding & language -----------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}        % change to [spanish] if needed
+
+% ---- mathematics -------------------------------------------
+\usepackage{amsmath, amssymb, amsthm}
+
+% ---- R code listings ---------------------------------------
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0.2,0.5,0.2}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codeblue}{rgb}{0.1,0.1,0.8}
+\definecolor{backcolor}{rgb}{0.97,0.97,0.97}
+
+\lstdefinestyle{Rstyle}{
+  language=R,
+  backgroundcolor=\color{backcolor},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{codeblue}\bfseries,
+  commentstyle=\color{codegreen}\itshape,
+  stringstyle=\color{orange},
+  numberstyle=\tiny\color{codegray},
+  numbers=left,
+  stepnumber=1,
+  frame=single,
+  rulecolor=\color{codegray},
+  breaklines=true,
+  showstringspaces=false,
+  tabsize=2,
+  captionpos=b
+}
+\lstset{style=Rstyle}
+
+% ---- layout ------------------------------------------------
+\usepackage{geometry}
+\geometry{margin=2.5cm}
+
+\usepackage{enumitem}             % better lists
+\usepackage{parskip}              % space between paragraphs, no indent
+\usepackage{titlesec}             % section formatting
+\usepackage{fancyhdr}             % header / footer
+\usepackage{lastpage}             % "Page X of Y"
+\usepackage{hyperref}             % clickable links (keep last)
+
+% ---- header & footer ---------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\textbf{Probability} — Unit 1: \unitname}
+\rhead{\today}
+\cfoot{Page \thepage\ of \pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ---- problem counter ---------------------------------------
+%  Resets automatically with each \day command below.
+\newcounter{problem}[section]
+\renewcommand{\theproblem}{\thesection.\arabic{problem}}
+
+\newcommand{\problem}[1][]{%          \problem  or  \problem[title]
+  \refstepcounter{problem}%
+  \medskip
+  \noindent\textbf{Problem~\theproblem%
+    \ifx&#1&\else~—~#1\fi}%          optional title after the dash
+  \par\smallskip
+}
+
+% ---- \day shortcut -----------------------------------------
+%  Usage:  \day{1}{Descriptive subtitle}
+\newcommand{\day}[2]{%
+  \section*{Day #1 \normalfont\small— #2}%
+  \addcontentsline{toc}{section}{Day #1: #2}%
+  % Reset problem counter relative to day, not section number:
+  \setcounter{problem}{0}%
+}
+
+% ---- unit name (edit here each time) -----------------------
+\newcommand{\unitname}{Sample Spaces and Events}
+
+% ============================================================
+\begin{document}
+% ============================================================
+
+\begin{center}
+  {\LARGE \textbf{Unit 1: \unitname}} \\[0.4em]
+  {\large Probability — Problem Sets} \\[0.2em]
+  {\small Last updated: \today}
+\end{center}
+
+\tableofcontents
+\bigskip\hrule\bigskip
+
+% ============================================================
+\day{1}{Introduction to Sample Spaces}
+% ============================================================
+
+\problem
+A fair six-sided die is rolled once.
+\begin{enumerate}[label=(\alph*)]
+  \item Write out the sample space $\Omega$.
+  \item Let $A$ be the event ``the result is even''. List the elements of $A$.
+  \item Compute $P(A)$.
+\end{enumerate}
+
+\problem[Complement rule]
+Let $B$ be the event ``the result is greater than 4''.
+\begin{enumerate}[label=(\alph*)]
+  \item Find $P(B)$ and $P(B^c)$.
+  \item Verify that $P(B) + P(B^c) = 1$.
+\end{enumerate}
+
+\problem[Simulation in R]
+The following code simulates 10{,}000 rolls of a fair die and estimates $P(A)$
+from Problem~1.1.
+\begin{lstlisting}
+set.seed(42)
+rolls <- sample(1:6, size = 10000, replace = TRUE)
+
+# Estimate P(even)
+mean(rolls %% 2 == 0)
+\end{lstlisting}
+Run the code, compare with the theoretical value, and explain any discrepancy.
+
+% ============================================================
+\day{2}{Operations on Events}
+% ============================================================
+
+\problem
+Let $\Omega = \{1, 2, 3, 4, 5, 6\}$, $A = \{2, 4, 6\}$, $B = \{4, 5, 6\}$.
+Compute:
+\begin{enumerate}[label=(\alph*)]
+  \item $A \cup B$
+  \item $A \cap B$
+  \item $A \setminus B$
+  \item $A^c \cap B$
+\end{enumerate}
+
+\problem
+Using the same events, verify the inclusion–exclusion formula
+\[
+  P(A \cup B) = P(A) + P(B) - P(A \cap B).
+\]
+
+\problem[De Morgan's laws]
+Prove or illustrate with an example that
+\[
+  (A \cup B)^c = A^c \cap B^c.
+\]
+
+% ============================================================
+\day{3}{Conditional Probability}
+% ============================================================
+
+\problem
+A card is drawn at random from a standard 52-card deck.
+Let $A = \{\text{the card is a heart}\}$ and $B = \{\text{the card is a face card}\}$.
+\begin{enumerate}[label=(\alph*)]
+  \item Compute $P(A \mid B)$.
+  \item Are $A$ and $B$ independent? Justify.
+\end{enumerate}
+
+\problem[Simulation in R]
+Estimate $P(A \mid B)$ by simulation and compare with your answer above.
+\begin{lstlisting}
+set.seed(7)
+suits  <- rep(c("hearts","diamonds","clubs","spades"), each = 13)
+values <- rep(c(2:10, "J","Q","K","A"), times = 4)
+deck   <- data.frame(suit = suits, value = values)
+
+n <- 100000
+draws <- deck[sample(nrow(deck), n, replace = TRUE), ]
+
+face_cards <- draws$value %in% c("J", "Q", "K")
+hearts     <- draws$suit == "hearts"
+
+# Estimate P(heart | face card)
+mean(hearts[face_cards])
+\end{lstlisting}
+
+% ============================================================
+%  Add more \day{4}{...} blocks here as the unit progresses.
+% ============================================================
+
+\end{document}
