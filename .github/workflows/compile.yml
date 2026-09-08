@@ -1,0 +1,42 @@
+name: Compile LaTeX units
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile all units
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: |
+            unit1/unit1.tex
+            unit2/unit2.tex
+            unit3/unit3.tex
+            unit4/unit4.tex
+            unit5/unit5.tex
+            unit6/unit6.tex
+            unit7/unit7.tex
+          work_in_root_file_dir: true
+
+      - name: Move PDFs to deploy folder
+        run: |
+          mkdir deploy
+          cp unit1/unit1.pdf deploy/
+          cp unit2/unit2.pdf deploy/
+          cp unit3/unit3.pdf deploy/
+          cp unit4/unit4.pdf deploy/
+          cp unit5/unit5.pdf deploy/
+          cp unit6/unit6.pdf deploy/
+          cp unit7/unit7.pdf deploy/
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./deploy
